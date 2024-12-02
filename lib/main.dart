@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_ban_ga/view/login_view.dart';
+import 'package:flutter_app_ban_ga/view/main_logo_app_view.dart';
 import 'package:get/get.dart';
 
 import 'firebase_options.dart';
@@ -24,10 +25,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      // home: const MainNavView(initialIndex: 0),
-      home: const LoginView(),
-      // home: const AccessLocation(),
-      // home:  RouteScreen(),
+      home: const MainLogoAppView(),
     );
   }
 }
