@@ -5,6 +5,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:get/get.dart';
 import '../../../model/location/location_model.dart';
+import '../../../view/main_nav_view.dart';
 import '../../common/image_extention.dart';
 
 class AccessLocation extends StatefulWidget {
@@ -72,7 +73,7 @@ class _AccessLocationState extends State<AccessLocation> {
               child: ElevatedButton(
                 onPressed: () async {
                   await _uploadLocationToFirebase(); // Gọi hàm
-                  // Get.to(() => const MainNavView(initialIndex: 0));
+                  Get.to(() => const MainNavView(initialIndex: 0));
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: const Color(0xffFF7622),
