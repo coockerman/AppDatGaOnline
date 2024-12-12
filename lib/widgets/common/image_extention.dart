@@ -20,6 +20,21 @@ class ImageAsset{
   //map
   static String map = '$baseImagePathPNG/map.png';
   static String marker = '$baseImagePathPNG/marker.png';
+  //HOME
+  static String users = '$baseImagePathPNG/users.png';
+  static String searchHome = '$baseImagePathPNG/searchHome.png';
+  static String microphone = '$baseImagePathPNG/microphone.png';
+  static String microphoneUn = '$baseImagePathPNG/microphoneUn.png';
+  static String chicken = '$baseImagePathPNG/chicken.png';
+  static String burger = '$baseImagePathPNG/burger.png';
+  static String combo = '$baseImagePathPNG/combo.png';
+  static String snack = '$baseImagePathPNG/snacks.png';
+  static String menu = '$baseImagePathPNG/menu.png';
+  static String menuUnn = '$baseImagePathPNG/menuUnn.png';
+  static String homeChicken = '$baseImagePathPNG/homeChicken.png';
+  static String starRating = '$baseImagePathPNG/star_rating.png';
+  static String star = '$baseImagePathPNG/star.png';
+
 
 
 
@@ -34,6 +49,13 @@ class ImageAsset{
   static String userUn = '$baseImagesPathSVG/user_un$format';
   static String arrowLeft = '$baseImagesPathSVG/arrowLeft$format';
   static String mapLocationWhite = '$baseImagesPathSVG/map_location_white$format';
+  static String locationRed = '$baseImagesPathSVG/location_red$format';
+  static String backButton = '$baseImagesPathSVG/back_button$format';
+  static String more = '$baseImagesPathSVG/more$format';
+
+  // static String searchHome = '$baseImagesPathSVG/search_home$format';
+
+
 
 
 
