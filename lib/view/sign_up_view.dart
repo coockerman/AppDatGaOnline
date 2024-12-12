@@ -1,7 +1,9 @@
+// ignore_for_file: avoid_print
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../view_model/sign_up_view_model.dart';
-import 'login_view.dart';
+import '../widgets/common_widget/check_mail/check_mail.dart';
 
 class SignUpView extends StatefulWidget {
   const SignUpView({super.key});
@@ -84,11 +86,20 @@ class _SignUpViewState extends State<SignUpView> {
                     // }, title: 'SIGN IN', sizeTitle: 16, fontW: FontWeight.bold, height: 53, radius: 12,);
                     return ElevatedButton(
                       onPressed: () {
-                        // if (controller.isValidSignupForm()) {
-                        //   controller.sendEmail(controller.email, codeMail.toString());
-                        //   print('test ma code1: $codeMail');
-                        //   Get.to(() => CheckMail(email: controller.email, password: controller.password, fullName: controller.hoTen, address: controller.address, sex: controller.sex, phoneNumber: controller.numberPhone,verificationCode: codeMail.toString(),));
-                        // }
+                        if (controller.isValidSignupForm()) {
+                          controller.sendEmail(
+                              controller.email, codeMail.toString());
+                          print('test ma code1: $codeMail');
+                          Get.to(() => CheckMail(
+                            email: controller.email,
+                            password: controller.password,
+                            fullName: controller.hoTen,
+                            address: controller.address,
+                            sex: controller.sex,
+                            phoneNumber: controller.numberPhone,
+                            verificationCode: codeMail.toString(),
+                          ));
+                        }
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color(0xffE53935),
@@ -100,15 +111,15 @@ class _SignUpViewState extends State<SignUpView> {
                       ),
                       child: controller.isLoading.value
                           ? const CircularProgressIndicator(
-                              color: Colors.white,
-                            )
+                        color: Colors.white,
+                      )
                           : const Text(
-                              'Continue',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
+                        'Continue',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
                     );
                   }),
                 ),
@@ -124,7 +135,7 @@ class _SignUpViewState extends State<SignUpView> {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 25.0),
       child: Obx(
-        () => TextFormField(
+            () => TextFormField(
           obscureText: controller.isObscured.value,
 
           style: const TextStyle(
@@ -163,7 +174,7 @@ class _SignUpViewState extends State<SignUpView> {
             filled: true,
             fillColor: Colors.grey[200], // Màu nền xám nhạt cho trường nhập
             hintText: 'Password',
-            hintStyle: TextStyle(
+            hintStyle: const TextStyle(
                 color: Color(0xff939393),
                 fontFamily: 'Poppins',
                 fontWeight: FontWeight.w500,
@@ -189,7 +200,7 @@ class _SignUpViewState extends State<SignUpView> {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 25.0),
       child: Obx(
-        () => TextFormField(
+            () => TextFormField(
           obscureText: controller.isEntryPasswordObscured.value,
           style: const TextStyle(
               color: Color(0xff939393),
@@ -227,7 +238,7 @@ class _SignUpViewState extends State<SignUpView> {
             filled: true,
             fillColor: Colors.grey[200], // Màu nền xám nhạt cho trường nhập
             hintText: 'Password',
-            hintStyle: TextStyle(
+            hintStyle: const TextStyle(
                 color: Color(0xff939393),
                 fontFamily: 'Poppins',
                 fontWeight: FontWeight.w500,
@@ -290,7 +301,7 @@ class _SignUpViewState extends State<SignUpView> {
           filled: true,
           fillColor: Colors.grey[200], // Màu nền xám nhạt cho trường nhập
           hintText: 'Email',
-          hintStyle: TextStyle(
+          hintStyle: const TextStyle(
               color: Color(0xff939393),
               fontFamily: 'Poppins',
               fontWeight: FontWeight.w500,
@@ -345,7 +356,7 @@ class _SignUpViewState extends State<SignUpView> {
           filled: true,
           fillColor: Colors.grey[200],
           hintText: hintText,
-          hintStyle: TextStyle(
+          hintStyle: const TextStyle(
               color: Color(0xff939393),
               fontFamily: 'Poppins',
               fontWeight: FontWeight.w500,
