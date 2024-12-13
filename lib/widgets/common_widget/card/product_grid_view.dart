@@ -41,6 +41,33 @@ class ProductGridView extends StatelessWidget {
                   fit: BoxFit.fill,
                 ),
               ),
+              Padding(
+                padding: const EdgeInsets.all(4),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    TruncatedText(
+                      text: product['Name'],
+                      maxWidth: 180,
+                      style: const TextStyle(
+                        fontSize: 16,
+                        color: Color(0xff32343E),
+                        fontWeight: FontWeight.w600,
+                        fontFamily: 'Poppins',
+                      ),
+                    ),
+                    Text(
+                      'Giá: ${product['Price']} VND',
+                      style: const TextStyle(
+                        fontSize: 16,
+                        color: Color(0xff32343E),
+                        fontWeight: FontWeight.w400,
+                        fontFamily: 'Poppins',
+                      ),
+                    ),
+                  ],
+                ),
+              ),
               Column(
                 children: [
                   const Row(

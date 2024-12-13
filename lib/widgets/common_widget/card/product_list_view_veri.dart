@@ -44,6 +44,33 @@ class ProductCardVeri extends StatelessWidget {
               ),
             ),
             Padding(
+              padding: const EdgeInsets.all(4),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  TruncatedText(
+                    text: product['Name'],
+                    maxWidth: 190,
+                    style: const TextStyle(
+                      fontSize: 16,
+                      color: Color(0xff32343E),
+                      fontWeight: FontWeight.w600,
+                      fontFamily: 'Poppins',
+                    ),
+                  ),
+                  Text(
+                    'Giá: ${product['Price']} VND',
+                    style: const TextStyle(
+                      fontSize: 16,
+                      color: Color(0xff32343E),
+                      fontWeight: FontWeight.w400,
+                      fontFamily: 'Poppins',
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Padding(
               padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 0),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
