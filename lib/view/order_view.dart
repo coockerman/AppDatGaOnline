@@ -84,6 +84,7 @@ class _MenuViewState extends State<MenuView> {
                 TitleSeeMore(title: 'Burger - Rice - Spaghetti'),
                 _buildProductList('Burger - Cơm - Mì Ý'),
                 const TitleSeeMore(title: 'Snacks'),
+                const TitleSeeMore(title: 'Snacks'),
                 _buildProductList('Thức ăn nhẹ'),
                 
               TitleSeeMore(title: 'Drinks And DessertsView'),
