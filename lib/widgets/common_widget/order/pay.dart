@@ -70,7 +70,7 @@ class _PayState extends State<Pay> {
               ),
               const Spacer(),
               const Text(
-                'Pay Your Order',
+                'Pay Order',
                 style: TextStyle(
                   fontSize: 24,
                   color: const Color(0xff32343E),
