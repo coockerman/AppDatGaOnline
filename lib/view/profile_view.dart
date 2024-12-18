@@ -34,7 +34,7 @@ class _ProfileViewState extends State<ProfileView> {
                         width: 36,
                         decoration: const BoxDecoration(
                           shape: BoxShape
-                              .circle, // Đặt hình dạng của container là hình tròn
+                              .circle,
                           color: Color(0xffD9D9D9),
                         ),
                         child: Padding(
@@ -56,11 +56,11 @@ class _ProfileViewState extends State<ProfileView> {
                 ],
               ),
               Container(
-                width: 36, // Tăng kích thước để dễ nhấn hơn
+                width: 36,
                 height: 36,
                 decoration: const BoxDecoration(
                   shape: BoxShape
-                      .circle, // Đặt hình dạng của container là hình tròn
+                      .circle,
                   color: Color(0xffD9D9D9),
                 ),
                 child: Center(
@@ -214,7 +214,7 @@ class _ProfileViewState extends State<ProfileView> {
                                     width: 36,
                                     decoration: const BoxDecoration(
                                       shape: BoxShape
-                                          .circle, // Đặt hình dạng của container là hình tròn
+                                          .circle,
                                       color: Color(0xffFFFFFF),
                                     ),
                                     child: Padding(
