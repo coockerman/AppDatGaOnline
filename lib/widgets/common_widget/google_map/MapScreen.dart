@@ -19,6 +19,7 @@ class _RouteScreenState extends State<RouteScreen> {
       final data = await routeService.getRoute(
         10.8231, 106.6297, // Tọa độ Hồ Chí Minh
         21.0285, 105.8542, // Tọa độ Hà Nội
+        //Todo toạ độ test
       );
 
       final route = data['routes'][0];
@@ -31,6 +32,7 @@ class _RouteScreenState extends State<RouteScreen> {
             '(${(step['distance'] / 1000).toStringAsFixed(2)} km)';
       }).join('\n');
 
+      //Khoảng cách
       setState(() {
         routeInfo = 'Quãng đường: ${(distance / 1000).toStringAsFixed(2)} km\n'
             'Thời gian: ${(duration / 3600).toStringAsFixed(2)} giờ\n\n';
