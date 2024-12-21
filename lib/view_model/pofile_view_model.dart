@@ -15,4 +15,31 @@ class ProfileViewModel extends GetxController{
     super.onInit();
     _initializeUserId();
   }
+
+  void _initializeUserId() async {
+    User? user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      _userId = user.uid;
+      await _getUserData();
+    }
+  }
+  Future<void> _getUserData() async {
+    DatabaseReference userRef = _database.child('users/$_userId');
+    DataSnapshot snapshot = await userRef.get();
+
+    if (snapshot.exists) {
+      _userData.value = Map<String, dynamic>.from(snapshot.value as Map);
+    } else {
+      _userData.value = {};
+    }
+  }
+  void onLogout() {
+    FirAuth firAuth = FirAuth(); 
+    firAuth.signOut(); 
+  }
+  @override
+  void onClose() {
+    searchController.dispose();
+    super.onClose();
+  }
 }
