@@ -33,4 +33,13 @@ class ProfileViewModel extends GetxController{
       _userData.value = {};
     }
   }
+  void onLogout() {
+    FirAuth firAuth = FirAuth(); 
+    firAuth.signOut(); 
+  }
+  @override
+  void onClose() {
+    searchController.dispose();
+    super.onClose();
+  }
 }
