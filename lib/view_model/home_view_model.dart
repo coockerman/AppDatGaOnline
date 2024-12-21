@@ -33,6 +33,7 @@ class HomeViewModel extends GetxController {
       await _getUserData();
     }
   }
+
   Future<void> addToShoppingCart(Map<String, dynamic> product) async {
     try {
       User? currentUser = FirebaseAuth.instance.currentUser;
@@ -44,7 +45,8 @@ class HomeViewModel extends GetxController {
       String userId = currentUser.uid;
 
       // Lấy danh sách ShoppingCart hiện tại từ Firebase
-      final snapshot = await _database.child('users/$userId/ShoppingCart').get();
+      final snapshot =
+          await _database.child('users/$userId/ShoppingCart').get();
       List<dynamic> currentCart = [];
 
       if (snapshot.exists && snapshot.value is List) {
@@ -52,7 +54,8 @@ class HomeViewModel extends GetxController {
       }
 
       // Kiểm tra xem sản phẩm đã có trong giỏ hàng chưa
-      bool isProductInCart = currentCart.any((item) => item['id'] == product['id']); // Kiểm tra dựa trên 'id' của sản phẩm
+      bool isProductInCart = currentCart.any((item) =>
+          item['id'] == product['id']); // Kiểm tra dựa trên 'id' của sản phẩm
 
       if (isProductInCart) {
         Get.snackbar(
@@ -69,7 +72,9 @@ class HomeViewModel extends GetxController {
 
         // Cập nhật lại shoppingCart và thông báo thành công
         shoppingCart.clear();
-        shoppingCart.addAll(currentCart.cast<Map<String, dynamic>>()); // Cập nhật shoppingCart bằng cách cast lại dữ liệu
+        shoppingCart.addAll(currentCart.cast<
+            Map<String,
+                dynamic>>()); // Cập nhật shoppingCart bằng cách cast lại dữ liệu
         update(); // Cập nhật UI
 
         Get.snackbar(
@@ -86,8 +91,6 @@ class HomeViewModel extends GetxController {
       );
     }
   }
-
-
 
   Future<void> _getUserData() async {
     DatabaseReference userRef = _database.child('users/$_userId');

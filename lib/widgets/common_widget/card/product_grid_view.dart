@@ -15,11 +15,13 @@ class ProductGridView extends StatelessWidget {
   Widget build(BuildContext context) {
     final controller = Get.put(HomeViewModel());
     return GestureDetector(
-      onTap: (){
+      onTap: () {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => FoodDetail(productDetail: product,),
+            builder: (context) => FoodDetail(
+              productDetail: product,
+            ),
           ),
         );
       },

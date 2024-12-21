@@ -3,6 +3,15 @@ import 'package:flutter_hungry_hub/view_model/profile_view_model.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
+import 'package:flutter_hungry_hub/widgets/common_widget/profile/addresses.dart';
+import 'package:flutter_hungry_hub/widgets/common_widget/profile/favourite.dart';
+import 'package:flutter_hungry_hub/widgets/common_widget/profile/notification.dart';
+import 'package:flutter_hungry_hub/widgets/common_widget/profile/order_tracking.dart';
+import 'package:flutter_hungry_hub/widgets/common_widget/profile/payment_method.dart';
+
+import 'package:flutter_hungry_hub/view/main_nav_view.dart';
+import 'package:flutter_hungry_hub/view/orders_view.dart';
+
 import '../widgets/common/image_extention.dart';
 import '../widgets/common_widget/profile/function_profile.dart';
 
