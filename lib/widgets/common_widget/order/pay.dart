@@ -1,3 +1,5 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hungry_hub/view_model/orders_view_model.dart';
 import 'package:flutter_hungry_hub/widgets/common/image_extention.dart';
@@ -6,8 +8,11 @@ import 'package:flutter_hungry_hub/widgets/common_widget/order/select_payment.da
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
+import 'package:vnpay_flutter/vnpay_flutter.dart';
 
+import '../../../view/test.dart';
 import '../evaluate/evaluate.dart';
+import '../profile/order_tracking.dart';
 
 class Pay extends StatefulWidget {
   List<Map<String, dynamic>> product;
@@ -27,6 +32,16 @@ class _PayState extends State<Pay> {
   List<Map<String, dynamic>> _stores = [];
   String? _selectedStoreId;
   bool _isLoadingStores = false;
+  String? selectedLocation; // Lưu địa chỉ được chọn
+  var selectedPaymentMethod = Rxn<Map<String, String>>();
+
+  final List<Map<String, String>> paymentMethods = [
+    {'id': '1', 'name': 'Cash on Delivery'},
+    {'id': '2', 'name': 'Payment via VNPay'},
+    {'id': '3', 'name': 'Payment via Stripe'},
+  ];
+  String responseCode = '';
+
 
   @override
   void initState() {
@@ -34,12 +49,12 @@ class _PayState extends State<Pay> {
     controller.fetchStores();
   }
 
-
   @override
   Widget build(BuildContext context) {
     double total1 = controller.calculateTotal(widget.product);  // Cập nhật tổng tiền với coupon
     double total = controller.calculateTotal(widget.product) - coupon + delivery;  // Cập nhật tổng tiền với coupon
     final selectedStore = Rx<Map<String, dynamic>?>(null); // Lưu cửa hàng được chọn
+    final selectedAddress = Rx<Map<String, dynamic>?>(null); // Lưu cửa hàng được chọn
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
@@ -70,7 +85,7 @@ class _PayState extends State<Pay> {
               ),
               const Spacer(),
               const Text(
-                'Pay Order',
+                'Pay Your Order',
                 style: TextStyle(
                   fontSize: 24,
                   color: const Color(0xff32343E),
@@ -236,6 +251,101 @@ class _PayState extends State<Pay> {
               _moneyToTal('Promo', coupon, const Color(0xff5B645F)),
               _moneyToTal('Total', total, const Color(0xff0D0D0D)),
               const SizedBox(height: 20,),
+              FutureBuilder<Map<String, String>>(
+                future: controller.fetchLocationsFromFirebase(),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Center(child: CircularProgressIndicator());
+                  } else if (snapshot.hasError) {
+                    return Center(
+                      child: Text(
+                        'Lỗi khi tải dữ liệu: ${snapshot.error}',
+                        style: TextStyle(color: Colors.red),
+                      ),
+                    );
+                  } else if (snapshot.hasData && snapshot.data!.isNotEmpty) {
+                    final Map<String, String> locations = snapshot.data!;
+
+                    // Tạo danh sách DropdownMenuItem từ dữ liệu
+                    final dropdownItems = locations.entries
+                        .map((entry) => DropdownMenuItem<String>(
+                      value: entry.key, // ID địa chỉ làm giá trị
+                      child: Text(
+                        entry.value, // Tên địa chỉ hiển thị
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w500,
+                          color: Colors.black87,
+                        ),
+                      ),
+                    ))
+                        .toList();
+
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 10.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          InputDecorator(
+                            decoration: InputDecoration(
+                              contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                              labelText: 'Select Address',  // Thay 'Select Store' bằng 'Chọn địa chỉ'
+                              labelStyle: const TextStyle(
+                                fontSize: 16,
+                                color: Colors.grey,
+                                fontWeight: FontWeight.w400,
+                                fontFamily: 'Poppins',
+                              ),
+                              enabledBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(12),
+                                borderSide: const BorderSide(color: Colors.grey),
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(12),
+                                borderSide: const BorderSide(color: Colors.blue),
+                              ),
+                            ),
+                            child: DropdownButtonHideUnderline(
+                              child: DropdownButton<String>(
+                                value: selectedLocation,
+                                hint: const Text(
+                                  'Select Address',  // Thay 'Select a store' bằng 'Chọn địa chỉ'
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    color: Color(0xff32343E),
+                                    fontWeight: FontWeight.w400,
+                                    fontFamily: 'Poppins',
+                                  ),
+                                ),
+                                isExpanded: true,  // Đảm bảo nút dropdown chiếm toàn bộ chiều ngang
+                                items: dropdownItems,
+                                onChanged: (String? newValue) {
+                                  setState(() {
+                                    selectedLocation = newValue;
+                                  });
+
+                                  // In ra giá trị được chọn
+                                  print('Địa chỉ được chọn: $newValue');
+                                },
+                                style: const TextStyle(
+                                  fontSize: 16,
+                                  color: Color(0xff32343E),
+                                  fontWeight: FontWeight.w400,
+                                  fontFamily: 'Poppins',
+                                ),
+                                icon: Image.asset(ImageAsset.downArrow, height: 18,),
+                              ),
+                            ),
+                          )
+
+                        ],
+                      ),
+                    );
+                  } else {
+                    return const Center(child: Text('Không có địa chỉ nào.'));
+                  }
+                },
+              ),
               Obx(() {
                 if (controller.stores.isEmpty) {
                   return const Center(child: Text('No stores available.', style: TextStyle(
@@ -355,16 +465,107 @@ class _PayState extends State<Pay> {
                   ),
                 );
               }),
+              Obx(() {
+                // Tạo danh sách các mục Dropdown
+                final List<DropdownMenuItem<Map<String, String>>> dropdownItems = paymentMethods
+                    .map((method) => DropdownMenuItem<Map<String, String>>(
+                  value: method,
+                  child: Text(
+                    method['name']!,
+                    style: const TextStyle(
+                      fontSize: 16,
+                      color: Color(0xff32343E),
+                      fontWeight: FontWeight.w400,
+                      fontFamily: 'Poppins',
+                    ),
+                  ),
+                ))
+                    .toList();
+
+                return Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      InputDecorator(
+                        decoration: InputDecoration(
+                          contentPadding:
+                          const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                          labelText: 'Select Payment Method',
+                          labelStyle: const TextStyle(
+                            fontSize: 16,
+                            color: Colors.grey,
+                            fontWeight: FontWeight.w400,
+                            fontFamily: 'Poppins',
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                            borderSide: const BorderSide(color: Colors.grey),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                            borderSide: const BorderSide(color: Colors.blue),
+                          ),
+                        ),
+                        child: DropdownButtonHideUnderline(
+                          child: DropdownButton<Map<String, String>>(
+                            value: selectedPaymentMethod.value,
+                            items: dropdownItems,
+                            onChanged: (method) {
+                              selectedPaymentMethod.value = method;
+                              print('Selected payment method: ${method!['name']}');
+                            },
+                            hint: const Text(
+                              'Select Payment Method',
+                              style: TextStyle(
+                                fontSize: 16,
+                                color: Color(0xff32343E),
+                                fontWeight: FontWeight.w400,
+                                fontFamily: 'Poppins',
+                              ),
+                            ),
+                            isExpanded: true,
+                            style: const TextStyle(
+                              fontSize: 16,
+                              color: Color(0xff32343E),
+                              fontWeight: FontWeight.w400,
+                              fontFamily: 'Poppins',
+                            ),
+                            dropdownColor: Colors.white,
+                            icon: selectedPaymentMethod.value?['id'] == '1'
+                                ? Image.asset(ImageAsset.money) // Thanh toán khi nhận hàng
+                                : selectedPaymentMethod.value?['id'] == '2'
+                                ? SvgPicture.asset(ImageAsset.vnpay, height: 48,) // Thanh toán VNPay
+                                : selectedPaymentMethod.value?['id'] == '3'
+                                ? Image.asset(ImageAsset.stripe, height: 48,) // Thanh toán Stripe
+                                : const Icon(Icons.payment, color: Colors.grey), // Mặc định
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                        ),
+                      ),
+
+                      const SizedBox(height: 16.0),
+                    ],
+                  ),
+                );
+              }),
 
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
                 child: BasicAppButton(
                     onPressed: (){
-                      Get.to(()=> const SelectPayment());
-                      // print('from store ${controller.fetchStores()}');
+                      if(selectedPaymentMethod.value?['id'] == '2'){
+                        onPayment(total);
+                        _showPaymentMethod(context, selectedPaymentMethod);
+                      } else if(selectedPaymentMethod.value?['id'] == '3'){
+                        _showPaymentMethod(context, selectedPaymentMethod);
+                      } else {
+                        _showPaymentMethod(context, selectedPaymentMethod);
+                      }
                     },
                     title: 'Continue to payment', sizeTitle: 16, height: 62, radius: 12, colorButton: const Color(0xffFF7622), fontW: FontWeight.w500,),
               ),
+
             ],
           ),
         ),
@@ -403,6 +604,170 @@ class _PayState extends State<Pay> {
 
         ],
       ),
+    );
+  }
+  void _showPaymentMethod(BuildContext context, Rxn<Map<String, String>> selectedPaymentMethod) {
+    showModalBottomSheet(
+      context: context,
+      barrierColor: Colors.grey.withOpacity(0.8),
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+      ),
+      isDismissible: true,
+      isScrollControlled: true,
+      builder: (context) {
+        return FractionallySizedBox(
+          heightFactor: 0.8,
+          child: SingleChildScrollView(
+            child: Padding(
+              padding: EdgeInsets.only(
+                left: 16,
+                right: 16,
+                bottom: MediaQuery.of(context).viewInsets.bottom,
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const SizedBox(height: 16),
+                  const Text(
+                    'Payment Confirmation',
+                    style: TextStyle(
+                      fontSize: 22,
+                      fontWeight: FontWeight.w600,
+                      fontFamily: 'Poppins',
+                      color: Color(0xff32343E),
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  if (selectedPaymentMethod.value?['id'] == '1')
+                    Align(
+                      alignment: Alignment.center,
+                      child: Column(
+                        children: [
+                          // Add a check icon for visual confirmation
+                          const SizedBox(height: 24),
+                          Image.asset(ImageAsset.check, height: 128,),
+                          const SizedBox(height: 64),
+
+                          const Text(
+                            'Your order has been confirmed by HungruHub.',
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.w500,
+                              fontFamily: 'Poppins',
+                              color: Colors.black87,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                          const SizedBox(height: 48),
+                          // Button to go to Order Tracking
+                          TextButton(
+                            onPressed: () {
+                              Get.to(() => const OrderTracking());
+                            },
+                            child: const Text(
+                              'Order Tracking',
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w500,
+                                color: Colors.white,
+                              ),
+                            ),
+                            style: TextButton.styleFrom(
+                              backgroundColor: const Color(0xffE03137),
+                              padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 40),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  if (selectedPaymentMethod.value?['id'] == '2')
+                    Align(
+                      alignment: Alignment.center,
+                      child: Column(
+                        children: [
+                          // Add a check icon for visual confirmation
+                          const SizedBox(height: 24),
+                          Image.asset(responseCode == '00' ? ImageAsset.check : ImageAsset.remove, height: 125,),
+                          const SizedBox(height: 64),
+
+                          const Text(
+                            'Your order has been confirmed by HungruHub.',
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.w500,
+                              fontFamily: 'Poppins',
+                              color: Colors.black87,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                          const SizedBox(height: 48),
+                          // Button to go to Order Tracking
+                          TextButton(
+                            onPressed: () {
+                              Get.to(() => const OrderTracking());
+                            },
+                            child: const Text(
+                              'Order Tracking',
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w500,
+                                color: Colors.white,
+                              ),
+                            ),
+                            style: TextButton.styleFrom(
+                              backgroundColor: const Color(0xffE03137),
+                              padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 40),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  const SizedBox(height: 16),
+                ],
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+  Future<void> onPayment(double amount) async {
+    final paymentUrl = VNPAYFlutter.instance.generatePaymentUrl(
+      url: 'https://sandbox.vnpayment.vn/paymentv2/vpcpay.html', //vnpay url, default is https://sandbox.vnpayment.vn/paymentv2/vpcpay.html
+      version: '2.0.1',
+      tmnCode: 'YLLVXBWY', //vnpay tmn code, get from vnpay
+      txnRef: DateTime.now().millisecondsSinceEpoch.toString(),
+      orderInfo: 'Pay $amount VND', //order info
+      amount: amount, // Sử dụng amount từ tham số truyền vào
+      returnUrl: 'https://sandbox.vnpayment.vn/merchant_webapi/api/transaction', //https://sandbox.vnpayment.vn/apis/docs/huong-dan-tich-hop/#code-returnurl
+      ipAdress: '192.168.10.10',
+      vnpayHashKey: '1J9MHQHA5NK9C4J3D26CZO1HAPO02IJY', //vnpay hash key, get from vnpay
+      vnPayHashType: VNPayHashType.HMACSHA512, //hash type. Default is HMACSHA512, you can chang it in: https://sandbox.vnpayment.vn/merchantv2,
+      vnpayExpireDate: DateTime.now().add(const Duration(hours: 1)),
+    );
+    await VNPAYFlutter.instance.show(
+      paymentUrl: paymentUrl,
+      onPaymentSuccess: (params) {
+        setState(() {
+          responseCode = params['vnp_ResponseCode'] ?? 'No Response Code';
+        });
+        // Print the response to the console
+        print('Payment Success: $params');
+      },
+      onPaymentError: (params) {
+        setState(() {
+          responseCode = 'Error';
+        });
+        // Print the error to the console
+        print('Payment Error: $params');
+      },
     );
   }
 }
