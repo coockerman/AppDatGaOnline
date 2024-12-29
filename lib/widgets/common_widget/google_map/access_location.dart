@@ -1,12 +1,13 @@
 // ignore_for_file: use_build_context_synchronously, deprecated_member_use
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_hungry_hub/view/main_nav_view.dart';
+import 'package:flutter_hungry_hub/widgets/common/image_extention.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:get/get.dart';
 import '../../../model/location/location_model.dart';
-import '../../../view/main_nav_view.dart';
-import '../../common/image_extention.dart';
 
 class AccessLocation extends StatefulWidget {
   const AccessLocation({super.key});
@@ -41,10 +42,10 @@ class _AccessLocationState extends State<AccessLocation> {
 
       String userId = currentUser.uid; // ID của người dùng hiện tại
       String locationData =
-      await LocationService().getCurrentLocationAndAddress();
+          await LocationService().getCurrentLocationAndAddress();
 
       // Ghi dữ liệu vị trí vào Firebase Realtime Database
-      await _database.child('users/$userId/location').set(locationData);
+      await _database.child('users/$userId/AddAdress/location').set(locationData);
 
       setState(() {
         location = locationData;

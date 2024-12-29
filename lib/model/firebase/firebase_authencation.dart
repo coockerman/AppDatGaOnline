@@ -3,7 +3,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_app_ban_ga/view/main_nav_view.dart';
 import 'package:get/get.dart';
 import '../../view/login_view.dart';
 import '../../widgets/common_widget/google_map/access_location.dart';
@@ -12,17 +11,17 @@ class FirAuth {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
 
   void signUp(
-      String email,
-      String passWord,
-      String entryPassword,
-      String hoTen,
-      String addRess,
-      String sex,
-      String numberPhone,
-      String role, // Nhận tham số role
-      Function onSuccess,
-      Function(String) onRegisterError,
-      ) {
+    String email,
+    String passWord,
+    String entryPassword,
+    String hoTen,
+    String addRess,
+    String sex,
+    String numberPhone,
+    String role, // Nhận tham số role
+    Function onSuccess,
+    Function(String) onRegisterError,
+  ) {
     _firebaseAuth
         .createUserWithEmailAndPassword(email: email, password: passWord)
         .then((user) {
@@ -83,11 +82,17 @@ class FirAuth {
           print("User signed in: ${credential.user!.email}");
           final userRole = userData['role'];
           print('form role1: $userRole');
-          if (userRole == 'admin') {
+          if (userRole == 'user') {
+            Get.offAll(() => const AccessLocation());
             // Get.offAll(() => const HomeScreenAdmin());
           } else {
             print('form role: $userRole');
-            Get.offAll(() => const AccessLocation());
+            Get.snackbar(
+              "Info",
+              "User account information is incorrect",
+              snackPosition: SnackPosition.TOP,
+            );
+            // Get.offAll(() => const AccessLocation());
             // Get.offAll(() => const MainNavView(initialIndex: 0,));
           }
         } else {

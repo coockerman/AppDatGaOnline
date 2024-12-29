@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_app_ban_ga/view/profile_view.dart';
+import 'package:flutter_hungry_hub/view/home_view.dart';
+import 'package:flutter_hungry_hub/view/orders_view.dart';
+import 'package:flutter_hungry_hub/view/profile_view.dart';
+import 'package:flutter_hungry_hub/view/menu_view.dart';
+import 'package:flutter_hungry_hub/view_model/main_nav_view_model.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 
-import '../view_model/main_nav_view_model.dart';
 import '../widgets/common/image_extention.dart';
-import 'home_view.dart';
-import 'menu_view.dart';
-import 'order_view.dart';
 
 class MainNavView extends StatelessWidget {
   final int initialIndex;
@@ -27,7 +27,7 @@ class MainNavView extends StatelessWidget {
           children: [
             HomeView(),
             MenuView(),
-            OrderView(),
+            OrdersView(),
             ProfileView(),
           ],
         ),

@@ -29,18 +29,13 @@ class FunctionProfile extends StatelessWidget {
                     image,
                   ),
                 )),
-            const SizedBox(
-              width: 20,
-            ),
-            Text(
-              title,
-              style: const TextStyle(
-                fontSize: 15,
-                color: Color(0xff111A2C),
-                fontWeight: FontWeight.w400,
-                fontFamily: 'Poppins',
-              ),
-            ),
+            const SizedBox(width: 20,),
+            Text(title, style: const TextStyle(
+              fontSize: 15,
+              color: Color(0xff111A2C),
+              fontWeight: FontWeight.w400,
+              fontFamily: 'Poppins',
+            ),),
           ],
         ),
         SvgPicture.asset(ImageAsset.arrowRight),

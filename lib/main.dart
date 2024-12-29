@@ -1,10 +1,9 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_app_ban_ga/view/login_view.dart';
-import 'package:flutter_app_ban_ga/view/main_logo_app_view.dart';
+import 'package:flutter_hungry_hub/firebase_options.dart';
+import 'package:flutter_hungry_hub/view/main_logo_app_view.dart';
+import 'package:flutter_hungry_hub/view/test_view.dart';
 import 'package:get/get.dart';
-
-import 'firebase_options.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -16,6 +15,7 @@ Future<void> main() async {
 }
 
 class MyApp extends StatelessWidget {
+  // ignore: use_super_parameters
   const MyApp({Key? key}) : super(key: key);
 
   @override
@@ -25,7 +25,10 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
+      // home: const MainNavView(initialIndex: 0),
       home: const MainLogoAppView(),
+      // home: const AccessLocation(),x
+      // home:  TestView(),
     );
   }
 }

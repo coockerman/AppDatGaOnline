@@ -1,10 +1,10 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_app_ban_ga/view/sign_up_view.dart';
+import 'package:flutter_hungry_hub/view/sign_up_view.dart';
+import 'package:flutter_hungry_hub/widgets/common_widget/button/bassic_button.dart';
 import 'package:get/get.dart';
 import '../view_model/login_view_model.dart';
 import '../widgets/common/image_extention.dart';
-import '../widgets/common_widget/button/bassic_button.dart';
 
 class LoginView extends StatefulWidget {
   const LoginView({super.key});
@@ -72,7 +72,7 @@ class _LoginViewState extends State<LoginView> {
                               TextSpan(
                                 text: ' Sign up here',
                                 style:
-                                const TextStyle(color: Color(0xffF44336)),
+                                    const TextStyle(color: Color(0xffF44336)),
                                 recognizer: TapGestureRecognizer()
                                   ..onTap = () {
                                     // Chuyển màn hình sang SignUpScreen
@@ -80,7 +80,7 @@ class _LoginViewState extends State<LoginView> {
                                       context,
                                       MaterialPageRoute(
                                         builder: (context) =>
-                                        const SignUpView(),
+                                            const SignUpView(),
                                       ),
                                     );
                                   },
@@ -226,7 +226,7 @@ class _LoginViewState extends State<LoginView> {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 8.0),
       child: Obx(
-            () => Column(
+        () => Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const Text(
@@ -317,7 +317,7 @@ class _LoginViewState extends State<LoginView> {
             obscureText: false,
             style: const TextStyle(
                 color:
-                Colors.black), // Chữ màu đen để hiển thị rõ trên nền trắng
+                    Colors.black), // Chữ màu đen để hiển thị rõ trên nền trắng
             decoration: InputDecoration(
               // labelText: 'Email',
               // labelStyle: const TextStyle(color: Colors.black), // Nhãn màu xám nhạt

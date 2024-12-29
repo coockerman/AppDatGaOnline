@@ -51,7 +51,7 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyBZQi_9_7Im07VHVeLoGCZmfeLiu-x-W7s',
-    appId: '1:584532754502:android:1e9a276fc70155e0e30a47',
+    appId: '1:584532754502:android:2b796bad7900fd72e30a47',
     messagingSenderId: '584532754502',
     projectId: 'flutter-hungryhub',
     databaseURL: 'https://flutter-hungryhub-default-rtdb.firebaseio.com',
@@ -60,11 +60,12 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions ios = FirebaseOptions(
     apiKey: 'AIzaSyBnFIuQqGletaB3ga7iIe6nAWFxLWWg8kg',
-    appId: '1:584532754502:ios:82761b15fedcf032e30a47',
+    appId: '1:584532754502:ios:387ea70d54369d6ce30a47',
     messagingSenderId: '584532754502',
     projectId: 'flutter-hungryhub',
     databaseURL: 'https://flutter-hungryhub-default-rtdb.firebaseio.com',
     storageBucket: 'flutter-hungryhub.firebasestorage.app',
-    iosBundleId: 'com.example.flutterAppBanGa',
+    iosBundleId: 'com.example.flutterHungryHub',
   );
+
 }

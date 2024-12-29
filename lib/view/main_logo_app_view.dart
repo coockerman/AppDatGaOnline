@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_hungry_hub/widgets/common/image_extention.dart';
 import 'package:get/get.dart';
 import '../view_model/main_nav_view_model.dart';
-import '../widgets/common/image_extention.dart';
 
 class MainLogoAppView extends StatefulWidget {
   const MainLogoAppView({super.key});
