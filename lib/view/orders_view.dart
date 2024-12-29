@@ -1,49 +1,73 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_hungry_hub/view_model/purchased_view_model.dart';
+import 'package:flutter_hungry_hub/view_model/home_view_model.dart';
+import 'package:flutter_hungry_hub/view_model/orders_view_model.dart';
+import 'package:flutter_hungry_hub/widgets/common/image_extention.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 
-import '../evaluate/evaluate.dart';
-import '../order/pay.dart';
-import 'app_bar_profile.dart';
-import 'evaluate_product.dart';
+import '../widgets/common_widget/evaluate/evaluate.dart';
+import '../widgets/common_widget/order/pay.dart';
 
-class Purchased extends StatefulWidget {
-  final List<String> idProduct; // Danh sách ID sản phẩm
-
-  Purchased({Key? key, this.idProduct = const []}) : super(key: key);
+class OrdersView extends StatefulWidget {
+  const OrdersView({super.key});
 
   @override
-  State<Purchased> createState() => _PurchasedState();
+  State<OrdersView> createState() => _OrdersViewState();
 }
 
-
-class _PurchasedState extends State<Purchased> {
-  final controller = Get.put(PurchasedViewModel());
+class _OrdersViewState extends State<OrdersView> {
+  final controller = Get.put(OrdersViewModel());
+  final controllerHome = Get.put(HomeViewModel());
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBarProfile(title: 'Purchased'),
-      body: Obx(() {
-        if (controller.ordersList.isEmpty) {
-          return const Center(child: Text("Your Purchased Cart is empty."));
-        }
+    return SafeArea(
+      child: Scaffold(
+        appBar: AppBar(
+          automaticallyImplyLeading: false,
+          title: const Text("Shopping Cart", style: TextStyle(
+            fontSize: 24,
+            color: Color(0xff32343E),
+            fontWeight: FontWeight.w500,
+            fontFamily: 'Poppins',
+          ),),
+        ),
+        body: Obx(() {
+          if (controller.ordersList.isEmpty) {
+            return const Center(child: Text("Your Shopping Cart is empty."));
+          }
 
-        return SingleChildScrollView(
-          child: Column(
-            children: [
-              ListView.builder(
-                shrinkWrap: true,
-                physics: NeverScrollableScrollPhysics(),
-                itemCount: controller.ordersList.length,
-                itemBuilder: (context, index) {
-                  final item = controller.ordersList[index];
-                  final isSelected = controller.selectedItems.contains(index); // Kiểm tra item có được chọn
+          return SingleChildScrollView(
+            child: Column(
+              children: [
+                ListView.builder(
+                  shrinkWrap: true,
+                  physics: NeverScrollableScrollPhysics(),
+                  itemCount: controller.ordersList.length,
+                  itemBuilder: (context, index) {
+                    final item = controller.ordersList[index];
+                    final isSelected = controller.selectedItems.contains(index);
 
-                  return Stack(
-                    children: [
-                      Container(
-                        margin: const EdgeInsets.symmetric(vertical: 24.0, horizontal: 12),
+                    return Dismissible(
+                      key: Key(item['id'].toString()), // Khóa duy nhất cho mỗi mục
+                      direction: DismissDirection.endToStart, // Vuốt từ phải sang trái
+                      background: Container(
+                        alignment: Alignment.centerRight,
+                        padding: const EdgeInsets.symmetric(horizontal: 20),
+                        color: Colors.redAccent, // Màu nền khi vuốt
+                        child: const Icon(Icons.delete, color: Colors.white),
+                      ),
+                      onDismissed: (direction) {
+                        // Xử lý khi mục bị xóa
+                        controllerHome.removeFromShoppingCart(item);
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text('Item ${item['Name']} removed'),
+                          ),
+                        );
+                      },
+                      child: Container(
+                        margin: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 12),
                         decoration: BoxDecoration(
                           color: Colors.white,
                           borderRadius: BorderRadius.circular(10),
@@ -127,71 +151,46 @@ class _PurchasedState extends State<Purchased> {
                               ),
                             ],
                           ),
-                          trailing: Obx(() => Checkbox(
-                            value: controller.selectedItems.contains(index),
-                            onChanged: (bool? value) {
-                              controller.toggleItemSelection(index);
-                            },
-                            activeColor: const Color(0xffD42323),
-                            checkColor: Colors.white,
-                          )),
-                        ),
-                      ),
-
-                      // Nút Đánh Giá Sản Phẩm (Được đặt ra ngoài Container)
-                      Positioned(
-                        right: 14,
-                        top: -4, // Đưa nút lên ngoài Container
-                        child: ElevatedButton(
-                          onPressed: () {
-                            // Chuyển sang trang đánh giá sản phẩm
-                            Get.to(() => EvaluateProduct(product: item,));
-                          },
-                          style: ElevatedButton.styleFrom(
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10),
-                            ), backgroundColor: Colors.orange, // Màu nền nút
-                          ),
-                          child: const Text(
-                            'Evaluate',
-                            style: TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.w500,
-                              color: Colors.white,
+                          trailing: Obx(
+                                () => Checkbox(
+                              value: controller.selectedItems.contains(index),
+                              onChanged: (bool? value) {
+                                controller.toggleItemSelection(index);
+                              },
+                              activeColor: const Color(0xffD42323),
+                              checkColor: Colors.white,
                             ),
                           ),
                         ),
                       ),
-                    ],
-                  );
-                },
-              ),
-              const SizedBox(height: 100,)
-            ],
-          ),
-        );
-      }),
-      floatingActionButton: Obx(() {
-        if (controller.selectedItems.isEmpty) {
-          return const SizedBox.shrink();
-        }
-        return FloatingActionButton.extended(
-          onPressed: () {
-            Get.to(() => Pay(product: controller.checkoutSelectedItems()));
-          },
-          label: const Text(
-            'Buy',
-            style: TextStyle(
+                    );
+                  },
+                ),
+                const SizedBox(height: 100,)
+            ]
+            ),
+          );
+        }),
+        floatingActionButton: Obx(() {
+          if (controller.selectedItems.isEmpty) {
+            return const SizedBox.shrink(); // Ẩn nút nếu không có sản phẩm nào được chọn
+          }
+          return FloatingActionButton.extended(
+            onPressed: () {
+              Get.to(() => Pay(product: controller.checkoutSelectedItems(),));
+              // controller.checkoutSelectedItems(); // Xử lý thanh toán
+            },
+            label: const Text('Buy', style: TextStyle(
               fontSize: 14,
               color: Color(0xffFFFFFF),
               fontWeight: FontWeight.w500,
               fontFamily: 'Poppins',
-            ),
-          ),
-          backgroundColor: const Color(0xffEF5350),
-          icon: const Icon(Icons.shopping_cart_checkout, color: Colors.white),
-        );
-      }),
+            ),),
+            backgroundColor: const Color(0xffEF5350),
+            icon: const Icon(Icons.shopping_cart_checkout, color: Colors.white,),
+          );
+        }),
+      ),
     );
   }
 }

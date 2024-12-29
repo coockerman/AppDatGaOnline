@@ -91,14 +91,14 @@ class _SignUpViewState extends State<SignUpView> {
                               controller.email, codeMail.toString());
                           print('test ma code1: $codeMail');
                           Get.to(() => CheckMail(
-                            email: controller.email,
-                            password: controller.password,
-                            fullName: controller.hoTen,
-                            address: controller.address,
-                            sex: controller.sex,
-                            phoneNumber: controller.numberPhone,
-                            verificationCode: codeMail.toString(),
-                          ));
+                                email: controller.email,
+                                password: controller.password,
+                                fullName: controller.hoTen,
+                                address: controller.address,
+                                sex: controller.sex,
+                                phoneNumber: controller.numberPhone,
+                                verificationCode: codeMail.toString(),
+                              ));
                         }
                       },
                       style: ElevatedButton.styleFrom(
@@ -107,19 +107,19 @@ class _SignUpViewState extends State<SignUpView> {
                           borderRadius: BorderRadius.circular(12),
                         ),
                         padding: const EdgeInsets.symmetric(
-                            vertical: 15, horizontal: 145),
+                            vertical: 15, horizontal: 100),
                       ),
                       child: controller.isLoading.value
                           ? const CircularProgressIndicator(
-                        color: Colors.white,
-                      )
+                              color: Colors.white,
+                            )
                           : const Text(
-                        'Continue',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
+                              'Continue',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
                     );
                   }),
                 ),
@@ -135,7 +135,7 @@ class _SignUpViewState extends State<SignUpView> {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 25.0),
       child: Obx(
-            () => TextFormField(
+        () => TextFormField(
           obscureText: controller.isObscured.value,
 
           style: const TextStyle(
@@ -200,7 +200,7 @@ class _SignUpViewState extends State<SignUpView> {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 25.0),
       child: Obx(
-            () => TextFormField(
+        () => TextFormField(
           obscureText: controller.isEntryPasswordObscured.value,
           style: const TextStyle(
               color: Color(0xff939393),

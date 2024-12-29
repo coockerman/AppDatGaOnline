@@ -4,11 +4,11 @@ import 'dart:async';
 
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_hungry_hub/widgets/common_widget/button/bassic_button.dart';
 import 'package:get/get.dart';
 
 import '../../../view/login_view.dart';
 import '../../../view_model/sign_up_view_model.dart';
-import '../button/bassic_button.dart';
 
 class CheckMail extends StatefulWidget {
   final String email;
@@ -42,12 +42,13 @@ class _CheckMailState extends State<CheckMail> {
   late Timer _timer;
   int _remainingSeconds = 90; // Thời gian đếm ngược (90s)
   final List<TextEditingController> _controllers =
-  List.generate(6, (_) => TextEditingController());
+      List.generate(6, (_) => TextEditingController());
 
   @override
   void initState() {
     super.initState();
     verificationCode = widget.verificationCode;
+    print('ma dc nhan: $verificationCode');
     startTimer();
   }
 
@@ -78,11 +79,12 @@ class _CheckMailState extends State<CheckMail> {
 
     // Tạo mã xác minh mới
     String newVerificationCode =
-    controller.generateVerificationCode().toString();
+        controller.generateVerificationCode().toString();
 
     setState(() {
       _remainingSeconds = 90; // Reset thời gian đếm ngược
       verificationCode = newVerificationCode; // Đặt lại giá trị mã xác minh
+      print('ma nhan dc moi la: $verificationCode');
     });
 
     startTimer(); // Bắt đầu lại timer
@@ -113,12 +115,12 @@ class _CheckMailState extends State<CheckMail> {
         controller.address,
         controller.sex,
         controller.numberPhone,
-            () {
+        () {
           controller.isLoading.value = false;
           controller.resetForm();
           Get.offAll(() => const LoginView());
         },
-            (error) {
+        (error) {
           controller.isLoading.value = false;
           Get.snackbar(
             'Error',
@@ -186,9 +188,6 @@ class _CheckMailState extends State<CheckMail> {
                       recognizer: TapGestureRecognizer()
                         ..onTap = () {
                           _resendCode(); // Gọi lại mã xác minh
-                          controller.sendEmail(controller.email,
-                              codeMail.toString()); // Gửi lại email
-                          print('code 2: $codeMail');
                         },
                     ),
                   ],
@@ -199,7 +198,8 @@ class _CheckMailState extends State<CheckMail> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: List.generate(6, (index) {
                   return Container(
-                    width: 45,
+                    width: 40,
+                    margin: const EdgeInsets.symmetric(horizontal: 5),
                     child: TextField(
                       controller: _controllers[index],
                       keyboardType: TextInputType.number,

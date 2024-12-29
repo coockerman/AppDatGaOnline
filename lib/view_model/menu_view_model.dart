@@ -1,3 +1,3 @@
 import 'package:get/get.dart';
 
-class MenuViewModel extends GetxController{}
+class MenuViewModel extends GetxController {}

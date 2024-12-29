@@ -76,7 +76,9 @@ class _HomeViewState extends State<HomeView> {
                       ),
                       const SizedBox(height: 8),
                       Text(
-                        controller.userData['address'].toString().toUpperCase(),
+                        (controller.userData['address'].toString().length > 20
+                            ? '${controller.userData['address'].toString().substring(0, 20)}...'
+                            : controller.userData['address'].toString()).toUpperCase(),
                         style: const TextStyle(
                           fontSize: 14,
                           color: Colors.black,
@@ -84,6 +86,7 @@ class _HomeViewState extends State<HomeView> {
                           fontFamily: 'Poppins',
                         ),
                       ),
+
                     ],
                   ),
                 ],
@@ -306,8 +309,8 @@ class _HomeViewState extends State<HomeView> {
                         itemCount: _products.length,
                         itemBuilder: (context, index) {
                           final product = _products[index];
-                          if (product['Category'] == 'Combo 1 Người' ||
-                              product['Category'] == 'Combo Nhóm') {
+                          if ((product['Category'] == 'Combo 1 Người' ||
+                              product['Category'] == 'Combo Nhóm') && (product['Show'] == 1)) {
                             return Padding(
                               padding:
                                   const EdgeInsets.symmetric(horizontal: 8.0),
@@ -340,7 +343,7 @@ class _HomeViewState extends State<HomeView> {
                         itemCount: _products.length,
                         itemBuilder: (context, index) {
                           final product = _products[index];
-                          if (product['Category'] == 'Gà Rán - Gà Quay') {
+                          if ((product['Category'] == 'Gà Rán - Gà Quay') && (product['Show'] == 1)) {
                             return Padding(
                               padding:
                                   const EdgeInsets.symmetric(horizontal: 8.0),
@@ -374,7 +377,7 @@ class _HomeViewState extends State<HomeView> {
                         itemCount: _products.length,
                         itemBuilder: (context, index) {
                           final product = _products[index];
-                          if (product['Category'] == 'Burger - Cơm - Mì Ý') {
+                          if ((product['Category'] == 'Burger - Cơm - Mì Ý')&& (product['Show'] == 1)) {
                             return Padding(
                               padding:
                                   const EdgeInsets.symmetric(horizontal: 8.0),
@@ -407,7 +410,7 @@ class _HomeViewState extends State<HomeView> {
                         itemCount: _products.length,
                         itemBuilder: (context, index) {
                           final product = _products[index];
-                          if (product['Category'] == 'Thức ăn nhẹ') {
+                          if ((product['Category'] == 'Thức ăn nhẹ') && (product['Show'] == 1)) {
                             return Padding(
                               padding:
                                   const EdgeInsets.symmetric(horizontal: 8.0),
